@@ -21,7 +21,7 @@ app.use('/api/v1/orders', order_route);
 const dbConfig = require('./config/database-config-example');
 
 /* connecting to the database */
-mongoose.connect(dbConfig.url, {
+mongoose.connect("mongodb://mongodb:27017/ecom", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -32,8 +32,12 @@ mongoose.connect(dbConfig.url, {
     process.exit();
 });
 
+app.get("/check" , (req,res)=>{
+    res.send("The application is up and running ");
+})
 /* listen for requests */
-const port = process.env.PORT || 4000
+console.log(process.env);
+const port = process.env.PORT || 5000
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
