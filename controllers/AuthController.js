@@ -14,21 +14,30 @@ const AuthController = {
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, 10)
         });
-
-        try {
-            const user = await newUser.save();
-            res.status(201).json({
-                type : 'success',
-                message: "User has been created successfuly",
-                user
-            })
-        } catch (err) {
-            res.status(500).json({
-                type: "error",
-                message: "Something went wrong please try again",
-                err
-            })
+        const userExist = await User.findOne({ email: newUser.email });
+        if (userExist)
+        {
+            return res.status(422).json({ 
+                error: "Email already exists"
+             });
         }
+        else {
+            try {
+                const user = await newUser.save();
+                res.status(201).json({
+                    type : 'success',
+                    message: "User has been created successfuly",
+                    user
+                })
+            } catch (err) {
+                res.status(500).json({
+                    type: "error",
+                    message: "Something went wrong please try again",
+                    err
+                })
+            }
+        }
+        
     },
 
     /* login existing user */
